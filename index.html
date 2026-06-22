@@ -1111,12 +1111,12 @@
         <div class="accordion-body-inner">
           <div class="pricing-grid">
             <div class="pricing-card">
-              <div class="pricing-name">🥉 Basic</div>
+              <div class="pricing-name">🥉 C1</div>
               <div class="pricing-price">$15</div>
               <div class="pricing-rub">~1 290 ₽</div>
               <ul class="pricing-features">
                 <li><span class="yes">✓</span> Базовый фейковый баланс</li>
-                <li><span class="yes">✓</span> Простые премиум-подарки</li>
+                <li><span class="yes">✓</span> Простые подарки</li>
                 <li><span class="no">✗</span> Без поддержки NFT</li>
                 <li><span class="no">✗</span> Без обновлений</li>
                 <li><span class="no">✗</span> Без поддержки</li>
@@ -1124,7 +1124,7 @@
               <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-outline" target="_blank" rel="noopener noreferrer">Выбрать</a>
             </div>
             <div class="pricing-card popular">
-              <div class="pricing-name">🥈 Standard</div>
+              <div class="pricing-name">🥈 C2</div>
               <div class="pricing-price">$35</div>
               <div class="pricing-rub">~2 990 ₽</div>
               <ul class="pricing-features">
@@ -1137,11 +1137,11 @@
               <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-green" target="_blank" rel="noopener noreferrer">Купить</a>
             </div>
             <div class="pricing-card">
-              <div class="pricing-name">🥇 Premium</div>
+              <div class="pricing-name">🥇 C3</div>
               <div class="pricing-price">$75</div>
               <div class="pricing-rub">~6 490 ₽</div>
               <ul class="pricing-features">
-                <li><span class="yes">✓</span> Всё из Standard</li>
+                <li><span class="yes">✓</span> Всё из C2</li>
                 <li><span class="yes">✓</span> Пожизненные обновления</li>
                 <li><span class="yes">✓</span> Доступ к исходному коду</li>
                 <li><span class="yes">✓</span> Персональная настройка</li>
@@ -1172,15 +1172,15 @@
             <div class="step-detailed">
               <div class="step-num">1</div>
               <div class="step-body">
-                <div class="step-title-text">Перейдите в Telegram-канал</div>
-                <div class="step-desc">Нажмите на кнопку <strong>"Купить в Telegram"</strong> в правом нижнем углу экрана или перейдите по ссылке <a href="https://t.me/auygram_plugin/7" target="_blank" style="color:#93c5fd;">t.me/auygram_plugin/7</a></div>
+                <div class="step-title-text">Перейдите в канал продавца</div>
+                <div class="step-desc">Нажмите на кнопку <strong>"Купить в Telegram"</strong> в правом нижнем углу экрана и напишите продавцу проекта. Или перейдите по ссылке <a href="https://t.me/auygram_plugin/7" target="_blank" style="color:#93c5fd;">t.me/auygram_plugin/7</a></div>
               </div>
             </div>
             <div class="step-detailed">
               <div class="step-num">2</div>
               <div class="step-body">
                 <div class="step-title-text">Выберите тариф</div>
-                <div class="step-desc">В канале найдите закреплённое сообщение с каталогом. Выберите тариф <strong>Basic</strong>, <strong>Standard</strong> или <strong>Premium</strong> и нажмите соответствующую кнопку.</div>
+                <div class="step-desc">В канале найдите закреплённое сообщение с каталогом. Выберите тариф <strong>C1</strong>, <strong>C2</strong> или <strong>C3</strong> и нажмите соответствующую кнопку.</div>
               </div>
             </div>
             <div class="step-detailed">
@@ -1262,39 +1262,71 @@
 <script>
 // ===== MODE SWITCHING =====
 function setMode(mode) {
-  // Update buttons
   document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('btn' + mode.charAt(0).toUpperCase() + mode.slice(1)).classList.add('active');
 
-  // Hide all mode contents
   document.querySelectorAll('.mode-content').forEach(el => {
     el.style.display = 'none';
   });
 
-  // Show selected mode with animation
   const selected = document.getElementById('mode-' + mode);
   selected.style.display = 'block';
   selected.style.animation = 'fadeUp 0.5s ease both';
 
-  // Scroll to top of content
   selected.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ===== ACCORDION TOGGLE =====
 function toggleAccordion(header) {
   const section = header.closest('.accordion-section');
-  const isOpen = section.classList.contains('open');
-
-  // Close all accordions in the same mode (optional - comment out if you want multiple open)
-  // section.closest('.mode-content').querySelectorAll('.accordion-section').forEach(s => s.classList.remove('open'));
-
-  // Toggle current
-  if (isOpen) {
-    section.classList.remove('open');
-  } else {
-    section.classList.add('open');
-  }
+  section.classList.toggle('open');
 }
+
+// ===== SCROLL-DRIVEN AUTO EXPAND/COLLAPSE =====
+(function() {
+  const observerOptions = {
+    root: null,
+    rootMargin: '-20% 0px -30% 0px',
+    threshold: [0, 0.1, 0.5, 0.9, 1]
+  };
+
+  const accordionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const section = entry.target;
+      const ratio = entry.intersectionRatio;
+
+      // If section is prominently in viewport, open it
+      if (ratio > 0.3 && entry.isIntersecting) {
+        if (!section.classList.contains('open')) {
+          section.classList.add('open');
+        }
+      }
+      // If section is mostly out of viewport, close it
+      else if (ratio < 0.1 && !entry.isIntersecting) {
+        if (section.classList.contains('open')) {
+          section.classList.remove('open');
+        }
+      }
+    });
+  }, observerOptions);
+
+  // Observe all accordions
+  function initScrollAccordions() {
+    document.querySelectorAll('.accordion-section[data-accordion]').forEach(section => {
+      accordionObserver.observe(section);
+    });
+  }
+
+  // Init on load and when mode changes
+  initScrollAccordions();
+
+  // Re-init when mode switches (since new content becomes visible)
+  const originalSetMode = setMode;
+  setMode = function(mode) {
+    originalSetMode(mode);
+    setTimeout(initScrollAccordions, 100);
+  };
+})();
 
 // ===== BACKGROUND CANVAS =====
 const canvas = document.getElementById('bgCanvas');
@@ -1378,4 +1410,4 @@ function animate() {
 animate();
 </script>
 </body>
-</html>
+ </html>

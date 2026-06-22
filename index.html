@@ -59,7 +59,7 @@
 
   .header {
     text-align: center;
-    margin-bottom: 56px;
+    margin-bottom: 40px;
     animation: fadeUp 0.8s ease both;
   }
 
@@ -97,128 +97,159 @@
     color: var(--text-muted);
     font-size: 16px;
     max-width: 520px;
-    margin: 0 auto 20px;
+    margin: 0 auto 28px;
     line-height: 1.6;
   }
 
-  .price-pill {
-    display: inline-block;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(59, 130, 246, 0.25);
-    font-family: var(--mono);
-    font-size: 13px;
-    color: #93c5fd;
-    padding: 10px 20px;
-    border-radius: 10px;
-    backdrop-filter: blur(12px);
-    line-height: 1.4;
-    margin-bottom: 20px;
+  /* ===== OVAL MODE BUTTONS ===== */
+  .mode-switch-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+    animation: fadeUp 0.9s 0.1s ease both;
   }
 
-  .price-pill .big { font-size: 24px; font-weight: 800; color: #fff; }
+  .mode-switch {
+    display: flex;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 5px;
+    gap: 4px;
+  }
 
-  .cta-btn {
-    display: inline-flex;
+  .mode-btn {
+    display: flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    color: #fff;
-    padding: 14px 32px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 15px;
-    text-decoration: none;
+    padding: 11px 24px;
+    border-radius: 99px;
     border: none;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+    background: transparent;
+    color: var(--text-muted);
     font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.28s cubic-bezier(.4,0,.2,1);
+    white-space: nowrap;
   }
 
-  .cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.35);
+  .mode-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .mode-btn.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--text);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
   }
 
-  .section {
+  .mode-btn:not(.active):hover {
+    background: var(--surface-hover);
+    color: var(--text-dim);
+  }
+
+  /* ===== ACCORDION SECTIONS ===== */
+  .accordion-section {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 36px 40px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     backdrop-filter: blur(20px);
+    overflow: hidden;
     animation: fadeUp 1s 0.15s ease both;
+    transition: all 0.4s cubic-bezier(.4,0,.2,1);
   }
 
-  .section-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 8px;
+  .accordion-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    padding: 20px 28px;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
   }
 
-  .section-title svg { width: 20px; height: 20px; color: var(--accent-light); flex-shrink: 0; }
-
-  .section-sub {
-    color: var(--text-muted);
-    font-size: 14px;
-    margin-bottom: 24px;
+  .accordion-header:hover {
+    background: rgba(255,255,255,0.02);
   }
 
-  .steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-
-  .step-detailed {
-    background: rgba(255,255,255,0.01);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 20px;
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    transition: border-color 0.2s;
-  }
-
-  .step-detailed:hover { border-color: var(--border-strong); }
-
-  .step-num {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+  .accordion-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background: var(--accent-glow);
     border: 1px solid rgba(59, 130, 246, 0.3);
-    color: var(--accent-light);
-    font-size: 13px;
-    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
   }
 
-  .step-body { flex: 1; }
-  .step-title-text { font-weight: 700; color: #fff; font-size: 14px; margin-bottom: 4px; }
-  .step-desc { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
-
-  .note {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    background: var(--accent-glow);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 13.5px;
-    color: var(--text-dim);
-    margin: 14px 0;
-    line-height: 1.6;
+  .accordion-icon svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent-light);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
   }
 
-  .note svg { width: 17px; height: 17px; color: var(--accent-light); flex-shrink: 0; margin-top: 1px; }
-  .note code { font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px; color: #93c5fd; }
+  .accordion-section.open .accordion-icon svg {
+    transform: rotate(180deg);
+  }
 
+  .accordion-title-wrap {
+    flex: 1;
+  }
+
+  .accordion-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .accordion-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .accordion-arrow {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  .accordion-section.open .accordion-arrow {
+    transform: rotate(180deg);
+  }
+
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(.4,0,.2,1), padding 0.4s ease;
+    padding: 0 28px;
+  }
+
+  .accordion-section.open .accordion-body {
+    max-height: 3000px;
+    padding: 0 28px 24px;
+  }
+
+  .accordion-body-inner {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+  }
+
+  .accordion-section.open .accordion-body-inner {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== CONTENT STYLES ===== */
   .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -280,6 +311,57 @@
   .feature-item.warn svg { color: var(--red); }
   .feature-item strong { color: var(--text); }
   .feature-item .red { color: var(--red-light); }
+
+  .steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
+  .step-detailed {
+    background: rgba(255,255,255,0.01);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+
+  .step-detailed:hover { border-color: var(--border-strong); }
+
+  .step-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: var(--accent-light);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-body { flex: 1; }
+  .step-title-text { font-weight: 700; color: #fff; font-size: 14px; margin-bottom: 4px; }
+  .step-desc { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+
+  .note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--accent-glow);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin: 14px 0;
+    line-height: 1.6;
+  }
+
+  .note svg { width: 17px; height: 17px; color: var(--accent-light); flex-shrink: 0; margin-top: 1px; }
+  .note code { font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px; color: #93c5fd; }
 
   .pricing-grid {
     display: grid;
@@ -446,7 +528,6 @@
     color: var(--text-muted);
   }
 
-  /* ===== SAFE INDICATOR ===== */
   .safe-indicator {
     display: inline-flex;
     align-items: center;
@@ -661,7 +742,11 @@
   @media(max-width:640px){
     .page { padding: 30px 14px 50px; }
     .header { margin-bottom: 36px; }
-    .section { padding: 24px 16px; border-radius: 16px; }
+    .mode-switch { flex-wrap: wrap; justify-content: center; }
+    .mode-btn { padding: 9px 16px; font-size: 13px; }
+    .accordion-header { padding: 16px 20px; }
+    .accordion-body { padding: 0 20px; }
+    .accordion-section.open .accordion-body { padding: 0 20px 20px; }
     .info-grid { grid-template-columns: 1fr; gap: 8px; }
     .pricing-grid { grid-template-columns: 1fr; }
     .step-detailed { flex-direction: column; gap: 12px; padding: 16px; }
@@ -672,6 +757,7 @@
     .tg-sticker { width: 100%; justify-content: center; }
   }
 </style>
+<base target="_blank">
 </head>
 <body>
 <canvas id="bgCanvas"></canvas>
@@ -699,204 +785,468 @@
     </div>
     <h1>Ultimate Gift<br><span style="background:linear-gradient(135deg,#93c5fd,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Toolkit</span></h1>
     <p class="hero-sub">Комбайн-плагин для Telegram X / Augram: фейковый баланс звёзд + перенаправление подарков. Полный контроль без списания реальных средств.</p>
-    <div class="price-pill">
-      <span class="big">$35</span> ~2 990 ₽ · Рекомендуемый тариф Standard
-    </div>
-    <br>
-    <a href="https://t.me/auygram_plugin/7" class="cta-btn" target="_blank" rel="noopener noreferrer">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Купить сейчас
-    </a>
   </header>
 
-  <div class="section">
-    <div class="section-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      Установка плагина
-    </div>
-    <div class="section-sub">Всего 3 простых шага — отправь файл в любой чат и открой</div>
-
-    <div class="steps">
-      <div class="step-detailed">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <div class="step-title-text">Отправьте файл плагина в любой чат</div>
-          <div class="step-desc">После покупки вы получите файлы плагина <code>ultimate_gift_toolkit</code>. Отправьте его в любой чат — например, в <strong>Избранное</strong> (Saved Messages) или любой другой диалог. Файл можно отправить как документ, просто прикрепите его к сообщению.</div>
-        </div>
-      </div>
-      <div class="step-detailed">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <div class="step-title-text">Нажмите на файл в чате</div>
-          <div class="step-desc">Найдите отправленный файл в чате и <strong>нажмите на него</strong>. Telegram X / Augram автоматически распознает файл как плагин и предложит установить. Подтвердите установку во всплывающем диалоге.</div>
-        </div>
-      </div>
-      <div class="step-detailed">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <div class="step-title-text">Плагин установлен!</div>
-          <div class="step-desc">После установки плагин активируется автоматически. Вы увидите уведомление <strong>"Ultimate Gift Toolkit загружен"</strong>. Настройки плагина появятся в разделе <strong>Плагины</strong> в настройках приложения.</div>
-        </div>
-      </div>
-    </div>
-    <div class="note">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>Для установки достаточно отправить файл плагина в любой чат, допустим в <strong>Избранное</strong>, и открыть его. Дальше плагин установится автоматически.</span>
+  <!-- Oval Mode Switcher -->
+  <div class="mode-switch-wrap">
+    <div class="mode-switch">
+      <button class="mode-btn active" id="btnDetail" onclick="setMode('detail')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Подробнее
+      </button>
+      <button class="mode-btn" id="btnInstall" onclick="setMode('install')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Установить
+      </button>
+      <button class="mode-btn" id="btnBuy" onclick="setMode('buy')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Купить
+      </button>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Общая информация
+  <!-- ===== MODE: DETAIL ===== -->
+  <div id="mode-detail" class="mode-content">
+
+    <!-- What is it -->
+    <div class="accordion-section open" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Что это?</div>
+          <div class="accordion-sub">Общая информация о плагине</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                Название
+              </div>
+              <code>Ultimate Gift Toolkit</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Версия
+              </div>
+              <code>1.0.0 Combined</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                Совместимость
+              </div>
+              <code>Telegram X / Augram 12.1.0+</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Формат
+              </div>
+              <code>Python (Jython)</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                Платформа
+              </div>
+              <code>Android 8.0+ / iOS</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Где купить
+              </div>
+              <code><a href="https://t.me/auygram_plugin/7" target="_blank" style="color:#93c5fd;text-decoration:none;">@auygram_plugin</a></code>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="section-sub">Технические детали и совместимость</div>
-    <div class="info-grid">
-      <div class="info-card">
-        <div class="info-card-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          Название
+
+    <!-- Features -->
+    <div class="accordion-section open" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
-        <code>Ultimate Gift Toolkit</code>
-      </div>
-      <div class="info-card">
-        <div class="info-card-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          Версия
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Возможности</div>
+          <div class="accordion-sub">Что умеет этот плагин</div>
         </div>
-        <code>1.0.0 Combined</code>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <div class="info-card">
-        <div class="info-card-label">
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="features-list">
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Фейковый баланс звёзд</strong> — установи любую сумму. Одинаковый баланс на STAR/TON без уменьшения после траты</span></div>
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Режим бесконечного баланса</strong> — автовосстановление после каждой "покупки"</span></div>
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Перехват API-платежей</strong> — подмена ответов сервера без списания реальных средств</span></div>
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Автоотображение подарков</strong> — в чате получателя или в Избранном</span></div>
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>NFT/уникальные подарки</strong> — с полными атрибутами, документами и стикерами</span></div>
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Встроенные настройки UI</strong> — переключатели и поля ввода в нативном интерфейсе</span></div>
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Нативные уведомления</strong> — всплывающие уведомления об успешных операциях</span></div>
+            <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Автооткрытие чата</strong> — автоматический переход к получателю после "покупки"</span></div>
+            <div class="feature-item warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span><strong>Премиум ТГ</strong> — покупает, но <span class="red">не отображает в чате или избранном</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Hooks -->
+    <div class="accordion-section" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          Совместимость
         </div>
-        <code>Telegram X / Augram 12.1.0+</code>
-      </div>
-      <div class="info-card">
-        <div class="info-card-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Формат
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">API Хуки</div>
+          <div class="accordion-sub">Методы, которые перехватывает плагин</div>
         </div>
-        <code>Python (Jython)</code>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <div class="info-card">
-        <div class="info-card-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          Платформа
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="hooks-list">
+            <div class="hook-item"><span class="hook-tag">Payment</span><span class="hook-name">TL_payments_sendStarsForm</span><span class="hook-desc">Перехват платежей</span></div>
+            <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getResaleStarGifts</span><span class="hook-desc">Перепродажа</span></div>
+            <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getSavedStarGifts</span><span class="hook-desc">Сохранённые</span></div>
+            <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getStarGifts</span><span class="hook-desc">Каталог</span></div>
+            <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getStarGiftUpgradePreview</span><span class="hook-desc">Превью апгрейда</span></div>
+            <div class="hook-item"><span class="hook-tag">Balance</span><span class="hook-name">StarsController.getBalance</span><span class="hook-desc">Баланс</span></div>
+            <div class="hook-item"><span class="hook-tag">Balance</span><span class="hook-name">StarsController.getCachedBalance</span><span class="hook-desc">Кэш баланса</span></div>
+            <div class="hook-item"><span class="hook-tag">Balance</span><span class="hook-name">StarsController.balanceAvailable</span><span class="hook-desc">Доступность</span></div>
+            <div class="hook-item"><span class="hook-tag">Network</span><span class="hook-name">ConnectionsManager.sendRequest</span><span class="hook-desc">Сеть</span></div>
+          </div>
         </div>
-        <code>Android 8.0+ / iOS</code>
       </div>
-      <div class="info-card">
-        <div class="info-card-label">
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="accordion-section" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Важное уведомление</div>
+          <div class="accordion-sub">Безопасность и отказ от ответственности</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="safe-indicator" style="margin-bottom:16px;">
+            <span class="safe-dot"></span>
+            Безопасно
+          </div>
+          <div class="disclaimer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Данный плагин предназначен исключительно для образовательных целей и тестирования. Использование может нарушать Условия обслуживания Telegram. Продавец не несёт ответственности за возможные блокировки аккаунтов. Все операции производятся на стороне клиента и дают полную анонимность, полностью локально и по словам продавца не подлежит банам со стороны Telegram.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== MODE: INSTALL ===== -->
+  <div id="mode-install" class="mode-content" style="display:none;">
+
+    <!-- Installation Steps -->
+    <div class="accordion-section open" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Шаги установки</div>
+          <div class="accordion-sub">3 простых шага — отправь файл и открой</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="steps">
+            <div class="step-detailed">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title-text">Отправьте файл плагина в любой чат</div>
+                <div class="step-desc">После покупки вы получите файл <code>ultimate_gift_toolkit.py</code>. Отправьте его в любой чат — например, в <strong>Избранное</strong> (Saved Messages) или любой другой диалог. Файл можно отправить как документ, просто прикрепите его к сообщению.</div>
+              </div>
+            </div>
+            <div class="step-detailed">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title-text">Нажмите на файл в чате</div>
+                <div class="step-desc">Найдите отправленный файл в чате и <strong>нажмите на него</strong>. Telegram X / Augram автоматически распознает файл как плагин и предложит установить. Подтвердите установку во всплывающем диалоге.</div>
+              </div>
+            </div>
+            <div class="step-detailed">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title-text">Плагин установлен!</div>
+                <div class="step-desc">После установки плагин активируется автоматически. Вы увидите уведомление <strong>"Ultimate Gift Toolkit загружен"</strong>. Настройки плагина появятся в разделе <strong>Плагины</strong> в настройках приложения.</div>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Для установки достаточно отправить файл плагина в любой чат, допустим в <strong>Избранное</strong>, и открыть его. Дальше плагин установится автоматически.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compatibility -->
+    <div class="accordion-section open" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Где работает</div>
+          <div class="accordion-sub">Поддерживаемые клиенты и платформы</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                Android
+              </div>
+              <code>Telegram X 12.1.0+<br>Augram 12.1.0+<br>Android 8.0+</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                iOS
+              </div>
+              <code>Augram iOS<br>Требуется jailbreak<br>или TrollStore</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                Не работает
+              </div>
+              <code>Официальный Telegram<br>Telegram Desktop<br>Web-версии</code>
+            </div>
+          </div>
+          <div class="note" style="margin-top:16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Плагин работает только в модифицированных клиентах <strong>Telegram X</strong> и <strong>Augram</strong>, которые поддерживают систему плагинов на Python (Jython). Официальный Telegram не поддерживает сторонние плагины.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="accordion-section" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Проблемы при установке?</div>
+          <div class="accordion-sub">Частые ошибки и их решения</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="steps">
+            <div class="step-detailed">
+              <div class="step-num">!</div>
+              <div class="step-body">
+                <div class="step-title-text">Файл не распознаётся как плагин</div>
+                <div class="step-desc">Убедитесь, что вы используете <strong>Telegram X</strong> или <strong>Augram</strong>, а не официальный Telegram. Также проверьте, что файл имеет расширение <code>.py</code> и не был переименован.</div>
+              </div>
+            </div>
+            <div class="step-detailed">
+              <div class="step-num">!</div>
+              <div class="step-body">
+                <div class="step-title-text">Ошибка "Plugin incompatible"</div>
+                <div class="step-desc">Ваша версия клиента устарела. Обновите Telegram X / Augram до версии <strong>12.1.0</strong> или выше через официальный канал обновлений.</div>
+              </div>
+            </div>
+            <div class="step-detailed">
+              <div class="step-num">!</div>
+              <div class="step-body">
+                <div class="step-title-text">Плагин установился, но не работает</div>
+                <div class="step-desc">Перезапустите приложение полностью (закройте из недавних и откройте заново). Проверьте настройки плагина в разделе <strong>Плагины → Ultimate Gift Toolkit</strong>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== MODE: BUY ===== -->
+  <div id="mode-buy" class="mode-content" style="display:none;">
+
+    <!-- Pricing -->
+    <div class="accordion-section open" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Тарифы</div>
+          <div class="accordion-sub">Выберите подходящий вариант</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="pricing-grid">
+            <div class="pricing-card">
+              <div class="pricing-name">🥉 Basic</div>
+              <div class="pricing-price">$15</div>
+              <div class="pricing-rub">~1 290 ₽</div>
+              <ul class="pricing-features">
+                <li><span class="yes">✓</span> Базовый фейковый баланс</li>
+                <li><span class="yes">✓</span> Простые премиум-подарки</li>
+                <li><span class="no">✗</span> Без поддержки NFT</li>
+                <li><span class="no">✗</span> Без обновлений</li>
+                <li><span class="no">✗</span> Без поддержки</li>
+              </ul>
+              <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-outline" target="_blank" rel="noopener noreferrer">Выбрать</a>
+            </div>
+            <div class="pricing-card popular">
+              <div class="pricing-name">🥈 Standard</div>
+              <div class="pricing-price">$35</div>
+              <div class="pricing-rub">~2 990 ₽</div>
+              <ul class="pricing-features">
+                <li><span class="yes">✓</span> Все функции Fake Stars</li>
+                <li><span class="yes">✓</span> Все функции Gift Redirect</li>
+                <li><span class="yes">✓</span> Поддержка NFT-подарков</li>
+                <li><span class="yes">✓</span> Обновления 3 мес.</li>
+                <li><span class="yes">✓</span> Приоритетная поддержка</li>
+              </ul>
+              <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-green" target="_blank" rel="noopener noreferrer">Купить</a>
+            </div>
+            <div class="pricing-card">
+              <div class="pricing-name">🥇 Premium</div>
+              <div class="pricing-price">$75</div>
+              <div class="pricing-rub">~6 490 ₽</div>
+              <ul class="pricing-features">
+                <li><span class="yes">✓</span> Всё из Standard</li>
+                <li><span class="yes">✓</span> Пожизненные обновления</li>
+                <li><span class="yes">✓</span> Доступ к исходному коду</li>
+                <li><span class="yes">✓</span> Персональная настройка</li>
+                <li><span class="yes">✓</span> VIP-канал с бета</li>
+              </ul>
+              <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-outline" target="_blank" rel="noopener noreferrer">Выбрать</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Buy -->
+    <div class="accordion-section open" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Где купить
         </div>
-        <code><a href="https://t.me/auygram_plugin/7" target="_blank" style="color:#93c5fd;text-decoration:none;">@auygram_plugin</a></code>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Как купить</div>
+          <div class="accordion-sub">Пошаговая инструкция по покупке</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="steps">
+            <div class="step-detailed">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title-text">Перейдите в Telegram-канал</div>
+                <div class="step-desc">Нажмите на кнопку <strong>"Купить в Telegram"</strong> в правом нижнем углу экрана или перейдите по ссылке <a href="https://t.me/auygram_plugin/7" target="_blank" style="color:#93c5fd;">t.me/auygram_plugin/7</a></div>
+              </div>
+            </div>
+            <div class="step-detailed">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title-text">Выберите тариф</div>
+                <div class="step-desc">В канале найдите закреплённое сообщение с каталогом. Выберите тариф <strong>Basic</strong>, <strong>Standard</strong> или <strong>Premium</strong> и нажмите соответствующую кнопку.</div>
+              </div>
+            </div>
+            <div class="step-detailed">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title-text">Оплатите удобным способом</div>
+                <div class="step-desc">Доступные способы: <strong>криптовалюта</strong> (USDT, BTC, ETH), <strong>банковская карта</strong> (РФ/СНГ), <strong>PayPal</strong>, <strong>WebMoney</strong>. Следуйте инструкциям бота для выбора способа оплаты.</div>
+              </div>
+            </div>
+            <div class="step-detailed">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title-text">Получите файл плагина</div>
+                <div class="step-desc">После подтверждения оплаты бот автоматически отправит вам файл <code>ultimate_gift_toolkit.py</code> в личные сообщения. Сохраните файл и следуйте инструкциям по установке.</div>
+              </div>
+            </div>
+          </div>
+          <div class="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Если у вас возникли вопросы по покупке — напишите в поддержку канала <a href="https://t.me/auygram_plugin" target="_blank" style="color:#93c5fd;">@auygram_plugin</a>. Ответ обычно приходит в течение 15 минут.</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      Возможности
-    </div>
-    <div class="section-sub">Что умеет этот плагин</div>
-    <div class="features-list">
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Фейковый баланс звёзд</strong> — установи любую сумму. Одинаковый баланс на STAR/TON без уменьшения после траты</span></div>
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Режим бесконечного баланса</strong> — автовосстановление после каждой "покупки"</span></div>
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Перехват API-платежей</strong> — подмена ответов сервера без списания реальных средств</span></div>
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Автоотображение подарков</strong> — в чате получателя или в Избранном</span></div>
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>NFT/уникальные подарки</strong> — с полными атрибутами, документами и стикерами</span></div>
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Встроенные настройки UI</strong> — переключатели и поля ввода в нативном интерфейсе</span></div>
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Нативные уведомления</strong> — всплывающие уведомления об успешных операциях</span></div>
-      <div class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Автооткрытие чата</strong> — автоматический переход к получателю после "покупки"</span></div>
-      <div class="feature-item warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span><strong>Премиум ТГ</strong> — покупает, но <span class="red">не отображает в чате или избранном</span></span></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Тарифы
-    </div>
-    <div class="section-sub">Выберите подходящий вариант</div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pricing-name">🥉 Basic</div>
-        <div class="pricing-price">$15</div>
-        <div class="pricing-rub">~1 290 ₽</div>
-        <ul class="pricing-features">
-          <li><span class="yes">✓</span> Базовый фейковый баланс</li>
-          <li><span class="yes">✓</span> Простые премиум-подарки</li>
-          <li><span class="no">✗</span> Без поддержки NFT</li>
-          <li><span class="no">✗</span> Без обновлений</li>
-          <li><span class="no">✗</span> Без поддержки</li>
-        </ul>
-        <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-outline" target="_blank" rel="noopener noreferrer">Выбрать</a>
+    <!-- Payment Methods -->
+    <div class="accordion-section" data-accordion>
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <div class="accordion-title-wrap">
+          <div class="accordion-title">Способы оплаты</div>
+          <div class="accordion-sub">Доступные методы оплаты по всему миру</div>
+        </div>
+        <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <div class="pricing-card popular">
-        <div class="pricing-name">🥈 Standard</div>
-        <div class="pricing-price">$35</div>
-        <div class="pricing-rub">~2 990 ₽</div>
-        <ul class="pricing-features">
-          <li><span class="yes">✓</span> Все функции Fake Stars</li>
-          <li><span class="yes">✓</span> Все функции Gift Redirect</li>
-          <li><span class="yes">✓</span> Поддержка NFT-подарков</li>
-          <li><span class="yes">✓</span> Обновления 3 мес.</li>
-          <li><span class="yes">✓</span> Приоритетная поддержка</li>
-        </ul>
-        <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-green" target="_blank" rel="noopener noreferrer">Купить</a>
-      </div>
-      <div class="pricing-card">
-        <div class="pricing-name">🥇 Premium</div>
-        <div class="pricing-price">$75</div>
-        <div class="pricing-rub">~6 490 ₽</div>
-        <ul class="pricing-features">
-          <li><span class="yes">✓</span> Всё из Standard</li>
-          <li><span class="yes">✓</span> Пожизненные обновления</li>
-          <li><span class="yes">✓</span> Доступ к исходному коду</li>
-          <li><span class="yes">✓</span> Персональная настройка</li>
-          <li><span class="yes">✓</span> VIP-канал с бета</li>
-        </ul>
-        <a href="https://t.me/auygram_plugin/7" class="pricing-btn pricing-btn-outline" target="_blank" rel="noopener noreferrer">Выбрать</a>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Криптовалюта
+              </div>
+              <code>USDT (TRC-20)<br>BTC<br>ETH<br>TON</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Банковская карта
+              </div>
+              <code>Visa / Mastercard<br>МИР (РФ)<br>СБП (РФ)</code>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                Другие
+              </div>
+              <code>PayPal<br>WebMoney<br>ЮMoney</code>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      API Хуки
-    </div>
-    <div class="section-sub">Методы, которые перехватывает плагин</div>
-    <div class="hooks-list">
-      <div class="hook-item"><span class="hook-tag">Payment</span><span class="hook-name">TL_payments_sendStarsForm</span><span class="hook-desc">Перехват платежей</span></div>
-      <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getResaleStarGifts</span><span class="hook-desc">Перепродажа</span></div>
-      <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getSavedStarGifts</span><span class="hook-desc">Сохранённые</span></div>
-      <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getStarGifts</span><span class="hook-desc">Каталог</span></div>
-      <div class="hook-item"><span class="hook-tag">Catalog</span><span class="hook-name">getStarGiftUpgradePreview</span><span class="hook-desc">Превью апгрейда</span></div>
-      <div class="hook-item"><span class="hook-tag">Balance</span><span class="hook-name">StarsController.getBalance</span><span class="hook-desc">Баланс</span></div>
-      <div class="hook-item"><span class="hook-tag">Balance</span><span class="hook-name">StarsController.getCachedBalance</span><span class="hook-desc">Кэш баланса</span></div>
-      <div class="hook-item"><span class="hook-tag">Balance</span><span class="hook-name">StarsController.balanceAvailable</span><span class="hook-desc">Доступность</span></div>
-      <div class="hook-item"><span class="hook-tag">Network</span><span class="hook-name">ConnectionsManager.sendRequest</span><span class="hook-desc">Сеть</span></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Важное уведомление
-    </div>
-    <div class="safe-indicator">
-      <span class="safe-dot"></span>
-      Безопасно
-    </div>
-    <div class="disclaimer">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>Данный плагин предназначен исключительно для образовательных целей и тестирования. Использование может нарушать Условия обслуживания Telegram. Продавец не несёт ответственности за возможные блокировки аккаунтов. <span class="safe-indicator" style="margin:0;display:inline-flex;vertical-align:middle;"><span class="safe-dot"></span>Безопасно</span> — Все операции производятся на стороне клиента и дают полную анонимность, полностью локально и по словам продавца не подлежит банам со стороны Telegram.</span>
-    </div>
   </div>
 
   <footer>
@@ -910,6 +1260,43 @@
 </div>
 
 <script>
+// ===== MODE SWITCHING =====
+function setMode(mode) {
+  // Update buttons
+  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('btn' + mode.charAt(0).toUpperCase() + mode.slice(1)).classList.add('active');
+
+  // Hide all mode contents
+  document.querySelectorAll('.mode-content').forEach(el => {
+    el.style.display = 'none';
+  });
+
+  // Show selected mode with animation
+  const selected = document.getElementById('mode-' + mode);
+  selected.style.display = 'block';
+  selected.style.animation = 'fadeUp 0.5s ease both';
+
+  // Scroll to top of content
+  selected.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== ACCORDION TOGGLE =====
+function toggleAccordion(header) {
+  const section = header.closest('.accordion-section');
+  const isOpen = section.classList.contains('open');
+
+  // Close all accordions in the same mode (optional - comment out if you want multiple open)
+  // section.closest('.mode-content').querySelectorAll('.accordion-section').forEach(s => s.classList.remove('open'));
+
+  // Toggle current
+  if (isOpen) {
+    section.classList.remove('open');
+  } else {
+    section.classList.add('open');
+  }
+}
+
+// ===== BACKGROUND CANVAS =====
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 

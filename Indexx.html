@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Gift Toolkit — Telegram X / Augram Plugin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0b1528;
+    --bg-deep: #070e1c;
+    --surface: rgba(255, 255, 255, 0.03);
+    --surface-hover: rgba(255, 255, 255, 0.06);
+    --surface-active: rgba(255, 255, 255, 0.08);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --text: #ffffff;
+    --text-muted: #8fa0c0;
+    --text-dim: #cbd5e1;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    --accent-light: #60a5fa;
+    --accent-bright: #93c5fd;
+    --green: #10b981;
+    --green-glow: rgba(16, 185, 129, 0.15);
+    --green-light: #34d399;
+    --red: #ef4444;
+    --red-glow: rgba(239, 68, 68, 0.15);
+    --red-light: #f87171;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Onest', sans-serif;
+    --radius: 20px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+    --transition-smooth: cubic-bezier(.4,0,.2,1);
+    --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-flip: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.65;
+  }
+
+  #bgCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s var(--transition-expo) both;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 99px;
+    margin-bottom: 22px;
+    animation: fadeUp 0.8s 0.1s var(--transition-expo) both;
+  }
+
+  .badge svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #ffffff 0%, #93c5fd 50%, var(--accent-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+    animation: fadeUp 0.8s 0.15s var(--transition-expo) both;
+  }
+
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 520px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+    animation: fadeUp 0.8s 0.2s var(--transition-expo) both;
+  }
+
+  /* ===== STICKY NAVIGATION BAR ===== */
+  .nav-bar {
+    position: sticky;
+    top: 16px;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    animation: fadeUp 0.9s 0.25s var(--transition-expo) both;
+  }
+
+  .nav-bar-inner {
+    display: flex;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 5px;
+    gap: 4px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.02);
+    transition: box-shadow 0.4s var(--transition-smooth), border-color 0.4s var(--transition-smooth);
+  }
+
+  .nav-bar-inner:hover {
+    border-color: rgba(59, 130, 246, 0.2);
+    box-shadow: 0 8px 32px rgba(59,130,246,0.1), 0 0 0 1px rgba(59,130,246,0.1);
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border-radius: 99px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.35s var(--transition-smooth);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-btn svg { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.3s var(--transition-bounce); }
+
+  .nav-btn.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--text);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 24px rgba(59, 130, 246, 0.12), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .nav-btn.active svg { transform: scale(1.1); }
+
+  .nav-btn:not(.active):hover {
+    background: var(--surface-hover);
+    color: var(--text-dim);
+    transform: translateY(-1px);
+  }
+
+  .nav-btn:not(.active):hover svg { transform: scale(1.15) rotate(-5deg); }
+
+  .nav-btn:active { transform: scale(0.97); }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 36px 0 20px;
+    animation: fadeUp 0.6s var(--transition-expo) both;
+  }
+
+  .section-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+  }
+
+  .section-divider-text {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ===== 3D FLIP CARDS (foxen style) ===== */
+  .flip-card {
+    perspective: 1000px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    animation: fadeUp 0.8s var(--transition-expo) both;
+  }
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    min-height: 180px;
+    transition: transform 0.6s var(--transition-flip);
+    transform-style: preserve-3d;
+  }
+
+  .flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .flip-card-front {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    z-index: 2;
+    transform: rotateY(0deg);
+  }
+
+  .flip-card:hover .flip-card-front {
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15), 0 0 0 1px rgba(59,130,246,0.05);
+  }
+
+  .flip-card-back {
+    background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(16,185,129,0.05));
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    backdrop-filter: blur(24px);
+    transform: rotateY(180deg);
+    z-index: 1;
+  }
+
+  .flip-card-front::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.4s var(--transition-smooth);
+  }
+
+  .flip-card:hover .flip-card-front::before { opacity: 1; }
+
+  .flip-num {
+    position: absolute;
+    top: 20px;
+    left: 28px;
+    font-size: 48px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    font-family: var(--mono);
+    transition: color 0.3s;
+  }
+
+  .flip-card:hover .flip-num { color: rgba(255,255,255,0.08); }
+
+  .flip-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-glow);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    transition: all 0.4s var(--transition-bounce);
+  }
+
+  .flip-card:hover .flip-icon-wrap {
+    transform: scale(1.08) rotate(-3deg);
+    box-shadow: 0 0 20px rgba(59,130,246,0.2);
+  }
+
+  .flip-icon-wrap svg { width: 22px; height: 22px; color: var(--accent-light); }
+
+  .flip-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    transition: color 0.3s;
+  }
+
+  .flip-card:hover .flip-title { color: var(--accent-bright); }
+
+  .flip-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .flip-hint {
+    position: absolute;
+    bottom: 20px;
+    right: 28px;
+    font-size: 11px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  .flip-card:hover .flip-hint { opacity: 0.8; }
+
+  .flip-card-back .flip-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff, var(--accent-bright));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .flip-desc {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .flip-desc strong { color: var(--text); }
+  .flip-desc code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: rgba(0,0,0,0.25);
+    padding: 2px 7px;
+    border-radius: 5px;
+    color: #93c5fd;
+  }
+
+  .flip-close-hint {
+    position: absolute;
+    bottom: 20px;
+    right: 28px;
+    font-size: 11px;
+    color: var(--accent-light);
+    opacity: 0.6;
+  }
+
+  /* ===== PRICING FLIP CARDS ===== */
+  .pricing-flip {
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .pricing-flip-inner {
+    position: relative;
+    width: 100%;
+    min-height: 420px;
+    transition: transform 0.7s var(--transition-flip);
+    transform-style: preserve-3d;
+  }
+
+  .pricing-flip.flipped .pricing-flip-inner {
+    transform: rotateY(180deg);
+  }
+
+  .pricing-flip-front, .pricing-flip-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .pricing-flip-front {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    transition: all 0.4s var(--transition-smooth);
+  }
+
+  .pricing-flip:hover .pricing-flip-front {
+    transform: translateY(-6px);
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2), 0 0 0 1px rgba(59,130,246,0.05);
+  }
+
+  .pricing-flip-back {
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(16,185,129,0.08));
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    transform: rotateY(180deg);
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .pricing-flip.popular .pricing-flip-front {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.08);
+  }
+
+  .pricing-flip.popular:hover .pricing-flip-front {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 16px 48px rgba(16, 185, 129, 0.12), 0 0 0 1px rgba(16,185,129,0.1);
+  }
+
+  .pricing-flip.popular .pricing-flip-back {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(59,130,246,0.08));
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: #000;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 4px 16px;
+    border-radius: 0 0 10px 10px;
+    letter-spacing: 0.05em;
+    z-index: 3;
+  }
+
+  .pricing-name { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; margin-top: 8px; }
+  .pricing-price { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 4px; transition: all 0.3s var(--transition-bounce); }
+  .pricing-flip:hover .pricing-price { transform: scale(1.05); }
+  .pricing-flip.popular .pricing-price { background: linear-gradient(135deg, var(--green-light), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .pricing-rub { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
+
+  .pricing-features { list-style: none; width: 100%; margin-bottom: 24px; }
+  .pricing-features li { padding: 8px 0; font-size: 13px; color: var(--text-dim); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+  .pricing-features li:last-child { border-bottom: none; }
+  .pricing-features li:hover { color: var(--text); }
+  .pricing-features .yes { color: var(--green); }
+  .pricing-features .no { color: var(--red); opacity: 0.5; }
+
+  .pricing-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-xs);
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s var(--transition-smooth);
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    text-align: center;
+    margin-top: auto;
+  }
+
+  .pricing-btn-outline {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border-strong);
+  }
+
+  .pricing-btn-outline:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .pricing-btn-green {
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: #000;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+  }
+
+  .pricing-btn-green:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(16, 185, 129, 0.3);
+  }
+
+  .pricing-back-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .pricing-back-content {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .pricing-back-content strong { color: var(--text); }
+  .pricing-back-content ul { margin-top: 8px; padding-left: 16px; }
+  .pricing-back-content li { margin-bottom: 6px; }
+
+  .flip-hint-center {
+    font-size: 11px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    margin-top: auto;
+    text-align: center;
+  }
+
+  /* ===== INFO GRID (non-flip) ===== */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .info-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    transition: all 0.3s var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    transform: scaleX(0);
+    transition: transform 0.4s var(--transition-expo);
+  }
+
+  .info-card:hover {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .info-card:hover::after { transform: scaleX(1); }
+
+  .info-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .info-card-label svg { width: 13px; height: 13px; }
+
+  .info-card code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: #93c5fd;
+    word-break: break-all;
+    line-height: 1.6;
+    display: block;
+  }
+
+  /* ===== STEPS (non-flip) ===== */
+  .steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
+  .step-detailed {
+    background: rgba(255,255,255,0.01);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: all 0.3s var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .step-detailed::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s var(--transition-expo);
+  }
+
+  .step-detailed:hover {
+    border-color: var(--border-strong);
+    background: rgba(255,255,255,0.03);
+    transform: translateX(4px);
+  }
+
+  .step-detailed:hover::before { transform: scaleY(1); }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: var(--accent-light);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s var(--transition-bounce);
+  }
+
+  .step-detailed:hover .step-num {
+    transform: scale(1.1);
+    box-shadow: 0 0 16px rgba(59,130,246,0.2);
+  }
+
+  .step-body { flex: 1; }
+  .step-title-text { font-weight: 700; color: #fff; font-size: 14px; margin-bottom: 4px; transition: color 0.3s; }
+  .step-detailed:hover .step-title-text { color: var(--accent-bright); }
+  .step-desc { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+
+  .note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--accent-glow);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin: 14px 0;
+    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--transition-smooth);
+  }
+
+  .note::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+
+  .note:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 20px rgba(59,130,246,0.08);
+  }
+
+  .note svg { width: 17px; height: 17px; color: var(--accent-light); flex-shrink: 0; margin-top: 1px; }
+  .note code { font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,0.2); padding: 1px 6px; border-radius: 4px; color: #93c5fd; }
+
+  .safe-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-glow);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 99px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green-light);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    transition: all 0.3s var(--transition-smooth);
+  }
+
+  .safe-indicator:hover {
+    box-shadow: 0 0 16px rgba(16,185,129,0.2);
+    transform: scale(1.02);
+  }
+
+  .safe-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: safePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  @keyframes safePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .disclaimer {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--red-glow);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--transition-smooth);
+  }
+
+  .disclaimer::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--red);
+  }
+
+  .disclaimer:hover {
+    border-color: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 4px 20px rgba(239,68,68,0.08);
+  }
+
+  .disclaimer svg { width: 17px; height: 17px; color: var(--red-light); flex-shrink: 0; margin-top: 1px; }
+  .disclaimer strong { color: var(--text); }
+
+  /* ===== TELEGRAM CTA ===== */
+  .tg-cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s var(--transition-expo) both;
+  }
+
+  .tg-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(16,185,129,0.1));
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: var(--radius);
+    padding: 16px 28px;
+    backdrop-filter: blur(20px);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.4s var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tg-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(59,130,246,0.08) 50%, transparent 60%);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  .tg-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(59,130,246,0.2), 0 0 0 1px rgba(59,130,246,0.3);
+    border-color: rgba(59,130,246,0.5);
+  }
+
+  .tg-cta:hover .tg-icon { animation: iconWiggle 0.5s ease; }
+
+  .tg-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    border-radius: var(--radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+  }
+
+  .tg-icon svg { width: 20px; height: 20px; color: #fff; }
+
+  .tg-text { display: flex; flex-direction: column; position: relative; z-index: 1; }
+  .tg-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .tg-link { font-family: var(--mono); font-size: 15px; color: #fff; font-weight: 700; }
+
+  .tg-ping {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: ping 2s cubic-bezier(0,0,0.2,1) infinite;
+    z-index: 2;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes iconWiggle {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+  }
+
+  @keyframes ping {
+    75%, 100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  footer {
+    text-align: center;
+    padding-top: 40px;
+    color: var(--text-muted);
+    font-size: 13px;
+    animation: fadeUp 1s 0.4s var(--transition-expo) both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 10px 20px;
+    font-weight: 600;
+    color: var(--text-dim);
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.3s var(--transition-smooth);
+  }
+
+  .footer-link:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .footer-link:hover svg { transform: scale(1.1) rotate(-5deg); }
+
+  .footer-link svg { width: 15px; height: 15px; color: var(--accent-light); transition: transform 0.3s var(--transition-bounce); }
+
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  kbd {
+    display: inline-block;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* ===== REVEAL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s var(--transition-expo), transform 0.6s var(--transition-expo);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @media(max-width:640px){
+    .page { padding: 30px 14px 50px; }
+    .header { margin-bottom: 36px; }
+    .nav-bar { top: 8px; }
+    .nav-bar-inner { flex-wrap: wrap; justify-content: center; padding: 4px; }
+    .nav-btn { padding: 9px 14px; font-size: 12px; }
+    .flip-card-inner { min-height: 220px; }
+    .flip-card-front, .flip-card-back { padding: 20px; }
+    .flip-num { font-size: 36px; top: 16px; left: 20px; }
+    .flip-title { font-size: 16px; }
+    .flip-desc { font-size: 12.5px; }
+    .info-grid { grid-template-columns: 1fr; gap: 8px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .pricing-flip-inner { min-height: 380px; }
+    .step-detailed { flex-direction: column; gap: 12px; padding: 16px; }
+    .step-num { width: 28px; height: 28px; font-size: 12px; }
+    .tg-cta { padding: 14px 20px; }
+    .tg-link { font-size: 13px; }
+  }
+
+  /* Pricing grid layout */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  @media(max-width: 768px){
+    .pricing-grid { grid-template-columns: 1fr; }
+    .flip-card-inner { min-height: 200px; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+
+<div class="page">
+
+  <header class="header">
+    <div class="badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Telegram X / Augram Plugin
+    </div>
+    <h1>Ultimate Gift<br><span style="background:linear-gradient(135deg,#93c5fd,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Toolkit</span></h1>
+    <p class="hero-sub">Комбайн-плагин для Telegram X / Augram: фейковый баланс звёзд + перенаправление подарков. Полный контроль без списания реальных средств.</p>
+  </header>
+
+  <!-- Sticky Navigation Bar -->
+  <nav class="nav-bar" id="navBar">
+    <div class="nav-bar-inner">
+      <button class="nav-btn active" id="btnDetail" onclick="setMode('detail')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Подробнее
+      </button>
+      <button class="nav-btn" id="btnInstall" onclick="setMode('install')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Установить
+      </button>
+      <button class="nav-btn" id="btnBuy" onclick="setMode('buy')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Купить
+      </button>
+    </div>
+  </nav>
+<!-- ===== MODE: DETAIL ===== -->
+  <div id="mode-detail" class="mode-content">
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-text">О плагине</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <!-- Info Grid (non-flip) -->
+    <div class="info-grid" style="margin-bottom:24px;">
+      <div class="info-card reveal" data-reveal>
+        <div class="info-card-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          Название
+        </div>
+        <code>Ultimate Gift Toolkit</code>
+      </div>
+      <div class="info-card reveal reveal-delay-1" data-reveal>
+        <div class="info-card-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Версия
+        </div>
+        <code>2.0.0 Ultimate</code>
+      </div>
+      <div class="info-card reveal reveal-delay-2" data-reveal>
+        <div class="info-card-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Совместимость
+        </div>
+        <code>Telegram X / Augram 12.1.0+</code>
+      </div>
+    </div>
+
+    <!-- Features Flip Cards -->
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-text">Возможности</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="flip-card reveal" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num">01</span>
+          <div class="flip-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="flip-title">Фейковый баланс</div>
+          <div class="flip-sub">Установи любую сумму звёзд</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-title">Фейковый баланс звёзд</div>
+          <div class="flip-desc">
+            Установи любую сумму на балансе <strong>STAR</strong> и <strong>TON</strong>. Баланс не уменьшается после "траты" — сервер получает подменённый ответ. Работает везде, где отображается баланс: профиль, магазин, чаты.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal reveal-delay-1" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num">02</span>
+          <div class="flip-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div class="flip-title">Бесконечный режим</div>
+          <div class="flip-sub">Автовосстановление баланса</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-title">Режим бесконечного баланса</div>
+          <div class="flip-desc">
+            После каждой операции баланс <strong>автоматически восстанавливается</strong> до установленного значения. Не нужно вручную сбрасывать — плагин перехватывает списание и мгновенно возвращает сумму. Идеально для демонстраций.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal reveal-delay-2" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num">03</span>
+          <div class="flip-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="flip-title">Перехват API</div>
+          <div class="flip-sub">Подмена ответов сервера</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-title">Перехват API-платежей</div>
+          <div class="flip-desc">
+            Перехватывает методы <code>TL_payments_sendStarsForm</code> и связанные запросы. Сервер получает фейковое подтверждение успешной оплаты, а реальные средства <strong>не списываются</strong>. Работает полностью локально на устройстве.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num">04</span>
+          <div class="flip-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="flip-title">Автоотображение</div>
+          <div class="flip-sub">Подарки в чате получателя</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-title">Автоотображение подарков</div>
+          <div class="flip-desc">
+            После "покупки" подарок <strong>автоматически появляется</strong> в чате получателя или в вашем Избранном. Визуально неотличим от реального: анимация, уведомление, запись в истории. Поддерживаются все типы подарков.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal reveal-delay-1" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num">05</span>
+          <div class="flip-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="flip-title">NFT и уникальные</div>
+          <div class="flip-sub">Полные атрибуты и документы</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-title">NFT/уникальные подарки</div>
+          <div class="flip-desc">
+            Поддержка <strong>NFT-подарков</strong> с полными атрибутами: документы владения, стикеры, уникальный номер, история передачи. Визуально идентичны оригиналам, включая анимированные превью и редкостные рамки.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal reveal-delay-2" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num">06</span>
+          <div class="flip-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <div class="flip-title">Нативный UI</div>
+          <div class="flip-sub">Встроенные настройки</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-title">Встроенные настройки UI</div>
+          <div class="flip-desc">
+            Переключатели, поля ввода суммы, списки — всё в <strong>нативном интерфейсе</strong> Telegram X / Augram. Не требует отдельных приложений или сложной конфигурации. Настройки сохраняются между сессиями.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Hooks Flip Cards -->
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-text">API Хуки</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="flip-card reveal" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num" style="color:rgba(239,68,68,0.08);">PAY</span>
+          <div class="flip-icon-wrap" style="background:var(--red-glow);border-color:rgba(239,68,68,0.3);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--red-light);"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <div class="flip-title">Payment Hook</div>
+          <div class="flip-sub">Перехват платежей</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back" style="background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(59,130,246,0.05)); border-color: rgba(239,68,68,0.25);">
+          <div class="flip-title">TL_payments_sendStarsForm</div>
+          <div class="flip-desc">
+            Перехватывает отправку платёжной формы звёзд. Подменяет ответ сервера на <strong>успешное выполнение</strong>, блокируя реальное списание. Работает со всеми типами транзакций: подарки, премиум, boosts.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal reveal-delay-1" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num" style="color:rgba(16,185,129,0.08);">CAT</span>
+          <div class="flip-icon-wrap" style="background:var(--green-glow);border-color:rgba(16,185,129,0.3);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green-light);"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          </div>
+          <div class="flip-title">Catalog Hooks</div>
+          <div class="flip-sub">Каталог и перепродажа</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back" style="background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.05)); border-color: rgba(16,185,129,0.25);">
+          <div class="flip-title">Каталог подарков</div>
+          <div class="flip-desc">
+            Перехватывает методы каталога: <code>getResaleStarGifts</code> (перепродажа), <code>getSavedStarGifts</code> (сохранённые), <code>getStarGifts</code> (каталог), <code>getStarGiftUpgradePreview</code> (превью). Позволяет просматривать и "покупать" любые подарки.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card reveal reveal-delay-2" data-reveal onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span class="flip-num" style="color:rgba(59,130,246,0.08);">BAL</span>
+          <div class="flip-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="flip-title">Balance Hooks</div>
+          <div class="flip-sub">Баланс и доступность</div>
+          <span class="flip-hint">Нажми чтобы узнать →</span>
+        </div>
+        <div class="flip-card-back">
+          <div class="flip-title">Управление балансом</div>
+          <div class="flip-desc">
+            Перехватывает <code>StarsController.getBalance</code>, <code>getCachedBalance</code> и <code>balanceAvailable</code>. Возвращает подменённое значение баланса во все части интерфейса: шапка, профиль, магазин, диалоги оплаты.
+          </div>
+          <span class="flip-close-hint">← Нажми чтобы закрыть</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-text">Безопасность</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="glass-card reveal" data-reveal style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div class="glass-card-icon-wrap" style="width:44px;height:44px;border-radius:var(--radius-sm);background:var(--red-glow);border:1px solid rgba(239,68,68,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--red-light);"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#fff;">Важное уведомление</div>
+          <div style="font-size:12px;color:var(--text-muted);">Безопасность и отказ от ответственности</div>
+        </div>
+      </div>
+      <div class="safe-indicator" style="margin-bottom:16px;">
+        <span class="safe-dot"></span>
+        Безопасно
+      </div>
+      <div class="disclaimer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Данный плагин предназначен исключительно для образовательных целей и тестирования. Использование может нарушать Условия обслуживания Telegram. Продавец не несёт ответственности за возможные блокировки аккаунтов. Все операции производятся на стороне клиента и дают полную анонимность, полностью локально и по словам продавца не подлежит банам со стороны Telegram.</span>
+      </div>
+    </div>
+
+  </div>
+<!-- ===== MODE: INSTALL ===== -->
+  <div id="mode-install" class="mode-content" style="display:none;">
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-text">Установка</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <!-- Installation Steps -->
+    <div class="glass-card reveal" data-reveal style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div class="glass-card-icon-wrap" style="width:44px;height:44px;border-radius:var(--radius-sm);background:var(--accent-glow);border:1px solid rgba(59,130,246,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--accent-light);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#fff;">Шаги установки</div>
+          <div style="font-size:12px;color:var(--text-muted);">3 простых шага — отправь файл и открой</div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step-detailed">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title-text">Отправьте файл плагина в любой чат</div>
+            <div class="step-desc">После покупки вы получите файл <code>ultimate_gift_toolkit.py</code>. Отправьте его в любой чат — например, в <strong>Избранное</strong> (Saved Messages) или любой другой диалог. Файл можно отправить как документ, просто прикрепите его к сообщению.</div>
+          </div>
+        </div>
+        <div class="step-detailed">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title-text">Нажмите на файл в чате</div>
+            <div class="step-desc">Найдите отправленный файл в чате и <strong>нажмите на него</strong>. Telegram X / Augram автоматически распознает файл как плагин и предложит установить. Подтвердите установку во всплывающем диалоге.</div>
+          </div>
+        </div>
+        <div class="step-detailed">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title-text">Плагин установлен!</div>
+            <div class="step-desc">После установки плагин активируется автоматически. Вы увидите уведомление <strong>"Ultimate Gift Toolkit загружен"</strong>. Настройки плагина появятся в разделе <strong>Плагины</strong> в настройках приложения.</div>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Для установки достаточно отправить файл плагина в любой чат, допустим в <strong>Избранное</strong>, и открыть его. Дальше плагин установится автоматически.</span>
+      </div>
+    </div>
+
+    <!-- Compatibility -->
+    <div class="glass-card reveal reveal-delay-1" data-reveal style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div class="glass-card-icon-wrap" style="width:44px;height:44px;border-radius:var(--radius-sm);background:var(--accent-glow);border:1px solid rgba(59,130,246,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--accent-light);"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#fff;">Совместимость</div>
+          <div style="font-size:12px;color:var(--text-muted);">Проверьте версию перед покупкой</div>
+        </div>
+      </div>
+      <div class="info-grid" style="margin:0;">
+        <div class="info-card">
+          <div class="info-card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+            Telegram X
+          </div>
+          <code>0.26.11.1734+</code>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+            Augram
+          </div>
+          <code>12.1.0+</code>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Android
+          </div>
+          <code>7.0+</code>
+        </div>
+      </div>
+      <div class="note" style="margin-top:16px;margin-bottom:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Плагин работает только на <strong>Android</strong> в клиентах с поддержкой плагинов. Убедитесь, что у вас установлена совместимая версия перед покупкой.</span>
+      </div>
+    </div>
+
+  </div>
+<!-- ===== MODE: BUY ===== -->
+  <div id="mode-buy" class="mode-content" style="display:none;">
+
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-text">Тарифы</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- C1: Basic -->
+      <div class="pricing-flip reveal" data-reveal onclick="this.classList.toggle('flipped')">
+        <div class="pricing-flip-inner">
+          <div class="pricing-flip-front">
+            <div class="pricing-name">C1 — Basic</div>
+            <div class="pricing-price">$15</div>
+            <div class="pricing-rub">~1 350 ₽</div>
+            <ul class="pricing-features">
+              <li><span class="yes">✓</span> Фейковый баланс STAR</li>
+              <li><span class="yes">✓</span> Перехват API платежей</li>
+              <li><span class="yes">✓</span> Автоотображение подарков</li>
+              <li><span class="no">✗</span> Бесконечный режим</li>
+              <li><span class="no">✗</span> NFT/уникальные подарки</li>
+              <li><span class="no">✗</span> Поддержка 24/7</li>
+            </ul>
+            <button class="pricing-btn pricing-btn-outline">Выбрать C1</button>
+            <div class="flip-hint-center">Нажми чтобы узнать подробнее</div>
+          </div>
+          <div class="pricing-flip-back">
+            <div class="pricing-back-title">C1 — Что включено</div>
+            <div class="pricing-back-content">
+              <strong>Базовый функционал</strong> для знакомства с плагином:
+              <ul>
+                <li>Подмена баланса <code>STAR</code> на любую сумму</li>
+                <li>Перехват <code>TL_payments_sendStarsForm</code></li>
+                <li>Визуальное отображение подарков в чатах</li>
+                <li>Нативный UI настроек</li>
+              </ul>
+              <strong>Ограничения:</strong> баланс не восстанавливается автоматически, после "траты" нужно вручную сбросить. Нет поддержки NFT и уникальных подарков.
+            </div>
+            <div class="flip-hint-center">← Нажми чтобы вернуться</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C2: Pro (Popular) -->
+      <div class="pricing-flip popular reveal reveal-delay-1" data-reveal onclick="this.classList.toggle('flipped')">
+        <div class="pricing-flip-inner">
+          <div class="pricing-flip-front">
+            <div class="popular-badge">Популярный</div>
+            <div class="pricing-name">C2 — Pro</div>
+            <div class="pricing-price">$35</div>
+            <div class="pricing-rub">~3 150 ₽</div>
+            <ul class="pricing-features">
+              <li><span class="yes">✓</span> Фейковый баланс STAR + TON</li>
+              <li><span class="yes">✓</span> Перехват API платежей</li>
+              <li><span class="yes">✓</span> Автоотображение подарков</li>
+              <li><span class="yes">✓</span> Бесконечный режим</li>
+              <li><span class="no">✗</span> NFT/уникальные подарки</li>
+              <li><span class="no">✗</span> Поддержка 24/7</li>
+            </ul>
+            <button class="pricing-btn pricing-btn-green">Выбрать C2</button>
+            <div class="flip-hint-center">Нажми чтобы узнать подробнее</div>
+          </div>
+          <div class="pricing-flip-back">
+            <div class="pricing-back-title">C2 — Что включено</div>
+            <div class="pricing-back-content">
+              <strong>Полный контроль</strong> с автоматизацией:
+              <ul>
+                <li>Подмена баланса <code>STAR</code> и <code>TON</code></li>
+                <li><strong>Бесконечный режим</strong> — автовосстановление после каждой операции</li>
+                <li>Все методы перехвата: <code>Payment</code>, <code>Catalog</code>, <code>Balance</code></li>
+                <li>Поддержка всех типов обычных подарков</li>
+              </ul>
+              <strong>Идеально для:</strong> демонстраций, тестирования, создания контента. Самый популярный выбор среди покупателей.
+            </div>
+            <div class="flip-hint-center">← Нажми чтобы вернуться</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C3: Ultimate -->
+      <div class="pricing-flip reveal reveal-delay-2" data-reveal onclick="this.classList.toggle('flipped')">
+        <div class="pricing-flip-inner">
+          <div class="pricing-flip-front">
+            <div class="pricing-name">C3 — Ultimate</div>
+            <div class="pricing-price">$75</div>
+            <div class="pricing-rub">~6 750 ₽</div>
+            <ul class="pricing-features">
+              <li><span class="yes">✓</span> Фейковый баланс STAR + TON</li>
+              <li><span class="yes">✓</span> Перехват API платежей</li>
+              <li><span class="yes">✓</span> Автоотображение подарков</li>
+              <li><span class="yes">✓</span> Бесконечный режим</li>
+              <li><span class="yes">✓</span> NFT/уникальные подарки</li>
+              <li><span class="yes">✓</span> Поддержка 24/7</li>
+            </ul>
+            <button class="pricing-btn pricing-btn-outline">Выбрать C3</button>
+            <div class="flip-hint-center">Нажми чтобы узнать подробнее</div>
+          </div>
+          <div class="pricing-flip-back">
+            <div class="pricing-back-title">C3 — Что включено</div>
+            <div class="pricing-back-content">
+              <strong>Максимум возможностей</strong> без ограничений:
+              <ul>
+                <li>Всё из C2 + <strong>NFT и уникальные подарки</strong></li>
+                <li>Полные атрибуты: документы владения, стикеры, уникальный номер</li>
+                <li>История передачи и анимированные превью</li>
+                <li>Приоритетная <strong>поддержка 24/7</strong> в Telegram</li>
+                <li>Ранний доступ к обновлениям</li>
+              </ul>
+              <strong>Идеально для:</strong> профессионального использования, создания уникального контента, полного погружения.
+            </div>
+            <div class="flip-hint-center">← Нажми чтобы вернуться</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Payment Info -->
+    <div class="glass-card reveal" data-reveal style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-top:24px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div class="glass-card-icon-wrap" style="width:44px;height:44px;border-radius:var(--radius-sm);background:var(--green-glow);border:1px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--green-light);"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#fff;">Способы оплаты</div>
+          <div style="font-size:12px;color:var(--text-muted);">Быстро и анонимно</div>
+        </div>
+      </div>
+      <div class="info-grid" style="margin:0;">
+        <div class="info-card">
+          <div class="info-card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            Криптовалюта
+          </div>
+          <code>USDT (TRC20)</code>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Карты РФ
+          </div>
+          <code>Sber, Tinkoff</code>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9m-9 9a9 9 0 0 1 9-9"/></svg>
+            Telegram
+          </div>
+          <code>@auygram_plugin</code>
+        </div>
+      </div>
+      <div class="note" style="margin-top:16px;margin-bottom:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>После оплаты напишите в Telegram <code>@auygram_plugin</code> с чеком. Файл плагина выдаётся в течение 10 минут.</span>
+      </div>
+    </div>
+
+  </div>
+<!-- Telegram CTA -->
+  <div class="tg-cta-wrap">
+    <a href="https://t.me/auygram_plugin" class="tg-cta">
+      <div class="tg-ping"></div>
+      <div class="tg-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 6.498a2.25 2.25 0 0 0 .09 4.284l3.602.923 1.914 5.615a1.5 1.5 0 0 0 2.52.553l2.563-2.474 3.735 2.754a2.25 2.25 0 0 0 3.555-1.62L22.5 4.5a2.25 2.25 0 0 0-1.302-2.067zM8.25 14.25l6.75-4.5-4.5 6-2.25-1.5z"/></svg>
+      </div>
+      <div class="tg-text">
+        <span class="tg-label">Написать в Telegram</span>
+        <span class="tg-link">@auygram_plugin</span>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    <div class="divider" style="width:100%;margin-bottom:20px;"></div>
+    <a href="https://t.me/auygram_plugin" class="footer-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 6.498a2.25 2.25 0 0 0 .09 4.284l3.602.923 1.914 5.615a1.5 1.5 0 0 0 2.52.553l2.563-2.474 3.735 2.754a2.25 2.25 0 0 0 3.555-1.62L22.5 4.5a2.25 2.25 0 0 0-1.302-2.067zM8.25 14.25l6.75-4.5-4.5 6-2.25-1.5z"/></svg>
+      @auygram_plugin
+    </a>
+    <p style="margin-top:8px;">Ultimate Gift Toolkit — независимый плагин для Telegram X / Augram</p>
+    <p style="font-size:12px;opacity:0.6;">2026 · Образовательные цели</p>
+  </footer>
+
+</div><!-- /page -->
+
+<script>
+/* ===== MODE SWITCHING ===== */
+function setMode(mode) {
+  document.querySelectorAll('.mode-content').forEach(el => el.style.display = 'none');
+  document.getElementById('mode-' + mode).style.display = 'block';
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('btn' + mode.charAt(0).toUpperCase() + mode.slice(1)).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(initReveal, 100);
+}
+
+/* ===== SCROLL REVEAL ===== */
+function initReveal() {
+  const reveals = document.querySelectorAll('.reveal');
+  reveals.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60) {
+      el.classList.add('visible');
+    }
+  });
+}
+
+window.addEventListener('scroll', () => {
+  const reveals = document.querySelectorAll('.reveal:not(.visible)');
+  reveals.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 40) {
+      el.classList.add('visible');
+    }
+  });
+});
+
+/* ===== BACKGROUND CANVAS ===== */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let w, h, particles = [];
+
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.r = Math.random() * 1.5 + 0.5;
+    this.alpha = Math.random() * 0.3 + 0.1;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0) this.x = w;
+    if (this.x > w) this.x = 0;
+    if (this.y < 0) this.y = h;
+    if (this.y > h) this.y = 0;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(100, 149, 237, ${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+function animate() {
+  ctx.clearRect(0, 0, w, h);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* Init reveal on load */
+setTimeout(initReveal, 300);
+</script>
+
+</body>
+  </html>
